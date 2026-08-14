@@ -1,0 +1,25 @@
+cabal-version:      3.0
+name:               desubstitute
+version:            0.1.0.0
+-- synopsis:
+-- description:
+license:            MIT
+license-file:       LICENSE
+author:             Michal Bernat
+maintainer:         michal.bernat.2005@gmail.com
+-- copyright:
+build-type:         Simple
+-- extra-doc-files:
+-- extra-source-files:
+
+common warnings
+    ghc-options: -Wall
+
+executable desubstitute
+    import:           warnings
+    main-is:          Main.hs
+    other-modules:    Algorithm, DistributionMatrix, Substitution
+    -- other-extensions:
+    build-depends:    containers ^>= 0.6.7, base ^>=4.18.3.0
+    hs-source-dirs:   src
+    default-language: Haskell2010

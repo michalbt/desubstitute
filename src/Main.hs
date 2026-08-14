@@ -1,8 +1,9 @@
 module Main where
 
-import DistributionMatrix (evaluate)
+import DistributionMatrix (evaluateDistribution)
 
-test = evaluate [[1.0, 2.0], [3.0, 4.0]] [[1.0, 2.0], [3.0, 4.0]]
+test :: Double
+test = evaluateDistribution [[1.0, 2.0], [3.0, 4.0]] [[1.0, 2.0], [3.0, 4.0]]
 
 main :: IO ()
 main = do

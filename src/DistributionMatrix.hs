@@ -1,26 +1,24 @@
 module DistributionMatrix where
 
-import Data.Map (Map, (!))
-
-type Digram = (Char, Char)
-
 -- Matrix of digram frequencies.
 type DistributionMatrix = [[Double]]
 
 -- Compute the evaluation function using the text and language distribution matrix.
-evaluate :: DistributionMatrix -> DistributionMatrix -> Double
-evaluate textMatrix originalMatrix = sum $ zipWith (\textRow originalRow -> sum $ zipWith (\x y -> abs (x - y)) textRow originalRow) textMatrix originalMatrix
+evaluateDistribution :: DistributionMatrix -> DistributionMatrix -> Double
+evaluateDistribution textMatrix languageMatrix =
+  sum $ zipWith (\textRow languageRow -> sum $ zipWith (\x y -> abs (x - y)) textRow languageRow) textMatrix languageMatrix
 
 -- Replace list element at a specified position with a different element, returning the original.
 replaceAt :: Int -> a -> [a] -> (a, [a])
 replaceAt _ _ [] = error "index to replace not in bounds"
 replaceAt 0 new (x:xs) = (x, new:xs)
 replaceAt idx new (x:xs) =
-    let (old, tail) = replaceAt (idx - 1) new xs
-    in (old, x:tail)
+    let (old, rest) = replaceAt (idx - 1) new xs
+    in (old, x:rest)
 
 -- Swap list elements at specified positions.
 swapAt :: Int -> Int -> [a] -> [a]
+swapAt _ _ [] = error "indices to swap not in bounds"
 swapAt idx1 idx2 (x:xs)
   | idx1 > idx2 = swapAt idx2 idx1 (x:xs)
   | idx1 == 0 = uncurry (:) (replaceAt (idx2 - 1) x xs)
