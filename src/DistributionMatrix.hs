@@ -1,12 +1,20 @@
 module DistributionMatrix where
 
--- Matrix of digram frequencies.
+import Data.Map (Map, (!))
+
+-- Matrix of digram frequencies. When indexing first by i and then by j, the element at that position is the frequency
+-- of a digram AB, where A is the i-th and B is the j-th element of the alphabet.
+-- This can either be a frequency in the ciphertext deciphered by the current substitution (in case of textMatrix),
+-- or an expected frequency in the language (in case of languageMatrix).
 type DistributionMatrix = [[Double]]
+
+-- Mapping from alphabet characters to matrix indices. Arbitrary and never changing.
+type ReverseAlphabetMap = Map Char Int
 
 -- Compute the evaluation function using the text and language distribution matrix.
 evaluateDistribution :: DistributionMatrix -> DistributionMatrix -> Double
 evaluateDistribution textMatrix languageMatrix =
-  sum $ zipWith (\textRow languageRow -> sum $ zipWith (\x y -> abs (x - y)) textRow languageRow) textMatrix languageMatrix
+    sum $ zipWith (\textRow languageRow -> sum $ zipWith (\x y -> abs (x - y)) textRow languageRow) textMatrix languageMatrix
 
 -- Replace list element at a specified position with a different element, returning the original.
 replaceAt :: Int -> a -> [a] -> (a, [a])
@@ -32,6 +40,10 @@ swapRows = swapAt
 swapCols :: Int -> Int -> DistributionMatrix -> DistributionMatrix
 swapCols col1 col2 = map (swapAt col1 col2)
 
--- Swap both rows and columns at specified indices of the distribution matrix.
-swapBoth :: Int -> Int -> DistributionMatrix -> DistributionMatrix
-swapBoth idx1 idx2 = swapCols idx1 idx2 . swapRows idx1 idx2
+-- Swap rows and columns corresponding to specified ciphertext characters in the distribution matrix.
+swapInMatrix :: Char -> Char -> ReverseAlphabetMap -> DistributionMatrix -> DistributionMatrix
+swapInMatrix char1 char2 reverseMap =
+    let
+        idx1 = reverseMap ! char1
+        idx2 = reverseMap ! char2
+    in swapCols idx1 idx2 . swapRows idx1 idx2

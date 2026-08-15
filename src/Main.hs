@@ -1,10 +1,15 @@
 module Main where
 
-import DistributionMatrix (evaluateDistribution)
+import Algorithm (advanceState, SwapperState, createState)
 
-test :: Double
-test = evaluateDistribution [[1.0, 2.0], [3.0, 4.0]] [[1.0, 2.0], [3.0, 4.0]]
+test :: SwapperState -> [(Char, Char)]
+test state = case advanceState state of
+    Just (chars, newState) -> chars : test newState
+    Nothing -> []
+
+initialState :: SwapperState
+initialState = createState ['a', 'b', 'c', 'd', 'e', 'f']
 
 main :: IO ()
 main = do
-    print test
+    print $ test initialState
