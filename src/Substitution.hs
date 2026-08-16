@@ -1,6 +1,7 @@
 module Substitution where
 
 import Data.Map (Map, (!), insert)
+import DistributionMatrix (mapFromKeysAndValues)
 
 -- Representation of a substitution as a map from ciphertext characters to plaintext characters.
 type Substitution = Map Char Char
@@ -21,3 +22,8 @@ swapChars char1 char2 substitution =
         value2 = substitution ! char2
     in
         insert char2 value1 $ insert char1 value2 substitution
+
+-- Create the initial substitution from ciphertext chars ordered by frequency (first argument)
+-- and language chars ordered by frequency (second argument).
+initialSubstitution :: [Char] -> [Char] -> Substitution
+initialSubstitution = mapFromKeysAndValues

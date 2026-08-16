@@ -1,6 +1,7 @@
 module DistributionMatrix where
 
-import Data.Map (Map, (!))
+import Data.Map (Map, (!), insert, empty)
+import FrequencyAnalyzer (textDigramCounts)
 
 -- Matrix of digram frequencies. When indexing first by i and then by j, the element at that position is the frequency
 -- of a digram AB, where A is the i-th and B is the j-th element of the alphabet.
@@ -8,8 +9,19 @@ import Data.Map (Map, (!))
 -- or an expected frequency in the language (in case of languageMatrix).
 type DistributionMatrix = [[Double]]
 
+-- Vector of character frequencies. Similar to DistributionMatrix, but only used for the language.
+type DistributionVector = [Double]
+
 -- Mapping from alphabet characters to matrix indices. Arbitrary and never changing.
 type ReverseAlphabetMap = Map Char Int
+
+-- Create a map from two lists - keys and values.
+mapFromKeysAndValues :: Ord a => [a] -> [b] -> Map a b
+mapFromKeysAndValues keys values = foldr (uncurry insert) empty $ zip keys values
+
+-- Create a reverse alphabet mapping from an alphabet.
+createReverseAlphabetMap :: [Char] -> ReverseAlphabetMap
+createReverseAlphabetMap alphabet = mapFromKeysAndValues alphabet [0..]
 
 -- Compute the evaluation function using the text and language distribution matrix.
 evaluateDistribution :: DistributionMatrix -> DistributionMatrix -> Double
@@ -47,3 +59,10 @@ swapInMatrix char1 char2 reverseMap =
         idx1 = reverseMap ! char1
         idx2 = reverseMap ! char2
     in swapCols idx1 idx2 . swapRows idx1 idx2
+
+createTextMatrix :: [Char] -> String -> DistributionMatrix
+createTextMatrix alphabet text =
+    let
+        digramCounts = textDigramCounts alphabet text
+        digramCountsSum = fromIntegral $ sum $ map sum digramCounts
+    in map (map ((/ digramCountsSum) . fromIntegral)) digramCounts

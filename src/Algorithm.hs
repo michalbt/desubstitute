@@ -1,7 +1,9 @@
 module Algorithm where
 
-import DistributionMatrix (DistributionMatrix, evaluateDistribution, ReverseAlphabetMap, swapInMatrix)
-import Substitution (Substitution, swapChars)
+import DistributionMatrix (createTextMatrix, createReverseAlphabetMap, DistributionMatrix, DistributionVector,
+    evaluateDistribution, ReverseAlphabetMap, swapInMatrix)
+import Substitution (initialSubstitution, Substitution, swapChars)
+import FrequencyAnalyzer (orderListByList, textCharFrequencyOrder)
 
 -- State of the character swapping logic of the algorithm.
 data SwapperState = SwapperState {
@@ -70,7 +72,15 @@ step textMatrix languageMatrix reverseMap swapperState currentValue substitution
                 let newSubstitution = swapChars left right substitution
                 in step newTextMatrix languageMatrix reverseMap (resetState newSwapperState) newValue newSubstitution
 
-
 -- Run the full algorithm.
-run :: [Char] -> String -> DistributionMatrix -> [Double] -> Substitution
-run alphabet ciphertext languageMatrix languageVector = error "not implemented"
+run :: [Char] -> String -> DistributionMatrix -> DistributionVector -> Substitution
+run alphabet ciphertext languageMatrix languageVector =
+    let
+        orderedTextChars = textCharFrequencyOrder alphabet ciphertext
+        orderedLanguageChars = orderListByList alphabet languageVector
+        textMatrix = createTextMatrix alphabet ciphertext
+        reverseMap = createReverseAlphabetMap alphabet
+        swapperState = createState orderedTextChars
+        currentValue = evaluateDistribution textMatrix languageMatrix
+        substitution = initialSubstitution orderedTextChars orderedLanguageChars
+    in step textMatrix languageMatrix reverseMap swapperState currentValue substitution
