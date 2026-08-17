@@ -1,14 +1,16 @@
 module Substitution where
 
-import Data.Map (Map, (!), insert)
+import Data.Map ((!), findWithDefault, insert, Map)
 import DistributionMatrix (mapFromKeysAndValues)
 
 -- Representation of a substitution as a map from ciphertext characters to plaintext characters.
+-- The space character is exluded as it is always expected to map to itself.
 type Substitution = Map Char Char
 
 -- Resolve one ciphertext character using a given substitution.
+-- If the character is not in the map, it is returned unchanged (e.g. for space).
 substituteChar :: Substitution -> Char -> Char
-substituteChar substitution char = substitution ! char
+substituteChar substitution char = findWithDefault char char substitution
 
 -- Resolve the ciphertext using a given substitution.
 substituteText :: Substitution -> String -> String

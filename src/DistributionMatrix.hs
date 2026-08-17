@@ -4,7 +4,7 @@ import Data.Map (Map, (!), insert, empty)
 import FrequencyAnalyzer (textDigramCounts)
 
 -- Matrix of digram frequencies. When indexing first by i and then by j, the element at that position is the frequency
--- of a digram AB, where A is the i-th and B is the j-th element of the alphabet.
+-- of a digram AB, where A is the i-th and B is the j-th element of the alphabet (including space).
 -- This can either be a frequency in the ciphertext deciphered by the current substitution (in case of textMatrix),
 -- or an expected frequency in the language (in case of languageMatrix).
 type DistributionMatrix = [[Double]]
@@ -12,7 +12,7 @@ type DistributionMatrix = [[Double]]
 -- Vector of character frequencies. Similar to DistributionMatrix, but only used for the language.
 type DistributionVector = [Double]
 
--- Mapping from alphabet characters to matrix indices. Arbitrary and never changing.
+-- Mapping from alphabet characters to matrix indices. Arbitrary and never changing. Excludes space.
 type ReverseAlphabetMap = Map Char Int
 
 -- Create a map from two lists - keys and values.
@@ -60,6 +60,7 @@ swapInMatrix char1 char2 reverseMap =
         idx2 = reverseMap ! char2
     in swapCols idx1 idx2 . swapRows idx1 idx2
 
+-- Create a distribution matrix for a given text.
 createTextMatrix :: [Char] -> String -> DistributionMatrix
 createTextMatrix alphabet text =
     let

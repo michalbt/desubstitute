@@ -2,7 +2,7 @@ module Algorithm where
 
 import DistributionMatrix (createTextMatrix, createReverseAlphabetMap, DistributionMatrix, DistributionVector,
     evaluateDistribution, ReverseAlphabetMap, swapInMatrix)
-import Substitution (initialSubstitution, Substitution, swapChars)
+import Substitution (initialSubstitution, Substitution, swapChars, substituteText)
 import FrequencyAnalyzer (orderListByList, textCharFrequencyOrder)
 
 -- State of the character swapping logic of the algorithm.
@@ -15,7 +15,7 @@ data SwapperState = SwapperState {
     nextLeft :: [Char],
     -- Pointer to the element that will be returned as right next.
     nextRight :: [Char]
-}
+} deriving (Eq, Show)
 
 -- Create an initial swapper state from the alphabet ordered by frequency in the ciphertext (most frequent first).
 createState :: [Char] -> SwapperState
@@ -78,9 +78,9 @@ run alphabet ciphertext languageMatrix languageVector =
     let
         orderedTextChars = textCharFrequencyOrder alphabet ciphertext
         orderedLanguageChars = orderListByList alphabet languageVector
-        textMatrix = createTextMatrix alphabet ciphertext
+        substitution = initialSubstitution orderedTextChars orderedLanguageChars
+        textMatrix = createTextMatrix alphabet (substituteText substitution ciphertext)
+        currentValue = evaluateDistribution textMatrix languageMatrix
         reverseMap = createReverseAlphabetMap alphabet
         swapperState = createState orderedTextChars
-        currentValue = evaluateDistribution textMatrix languageMatrix
-        substitution = initialSubstitution orderedTextChars orderedLanguageChars
     in step textMatrix languageMatrix reverseMap swapperState currentValue substitution

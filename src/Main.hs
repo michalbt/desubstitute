@@ -10,6 +10,7 @@ alphabet = "abc"
 
 ciphertext :: String
 ciphertext = "aababaaacbaaba"
+-- Expected plaintext: "bbababbbcabbab"
 
 languageMatrix :: DistributionMatrix
 languageMatrix = [
@@ -22,5 +23,4 @@ languageVector = [0.3, 0.55, 0.15]
 
 main :: IO ()
 main = do
-    -- Currently producing: a -> a, b -> b, c -> c (wrong)
     print $ run alphabet ciphertext languageMatrix languageVector
