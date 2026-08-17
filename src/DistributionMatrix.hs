@@ -4,7 +4,7 @@ import Data.Map (Map, (!), insert, empty)
 import FrequencyAnalyzer (textDigramCounts)
 
 -- Matrix of digram frequencies. When indexing first by i and then by j, the element at that position is the frequency
--- of a digram AB, where A is the i-th and B is the j-th element of the alphabet (including space).
+-- of a digram AB, where A is the i-th and B is the j-th element of the alphabet (possibly including space).
 -- This can either be a frequency in the ciphertext deciphered by the current substitution (in case of textMatrix),
 -- or an expected frequency in the language (in case of languageMatrix).
 type DistributionMatrix = [[Double]]

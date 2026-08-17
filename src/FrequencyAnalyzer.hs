@@ -23,8 +23,6 @@ textCharFrequencyOrder alphabet text = orderListByList alphabet (textCharCounts 
 allTextDigrams :: String -> [(Char, Char)]
 allTextDigrams text = zip text (tail text)
 
--- Count the number of occurences of each digram of alphabet characters (including space) in the text.
+-- Count the number of occurences of each digram of alphabet characters (possibly including space) in the text.
 textDigramCounts :: [Char] -> String -> [[Int]]
-textDigramCounts alphabet text =
-    let alphabetWithSpace = alphabet ++ [' ']
-    in map (\char1 -> map (\char2 -> count (char1, char2) $ allTextDigrams text) alphabetWithSpace) alphabetWithSpace
+textDigramCounts alphabet text = map (\char1 -> map (\char2 -> count (char1, char2) $ allTextDigrams text) alphabet) alphabet

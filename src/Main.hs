@@ -21,6 +21,9 @@ languageMatrix = [
 languageVector :: DistributionVector
 languageVector = [0.3, 0.55, 0.15]
 
+includeSpaceInDigrams :: Bool
+includeSpaceInDigrams = False
+
 main :: IO ()
 main = do
-    print $ run alphabet ciphertext languageMatrix languageVector
+    print $ run alphabet ciphertext languageMatrix languageVector includeSpaceInDigrams

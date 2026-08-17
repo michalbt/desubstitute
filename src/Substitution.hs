@@ -4,7 +4,7 @@ import Data.Map ((!), findWithDefault, insert, Map)
 import DistributionMatrix (mapFromKeysAndValues)
 
 -- Representation of a substitution as a map from ciphertext characters to plaintext characters.
--- The space character is exluded as it is always expected to map to itself.
+-- The space character is excluded as it is always expected to map to itself.
 type Substitution = Map Char Char
 
 -- Resolve one ciphertext character using a given substitution.

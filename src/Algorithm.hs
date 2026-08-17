@@ -73,13 +73,16 @@ step textMatrix languageMatrix reverseMap swapperState currentValue substitution
                 in step newTextMatrix languageMatrix reverseMap (resetState newSwapperState) newValue newSubstitution
 
 -- Run the full algorithm.
-run :: [Char] -> String -> DistributionMatrix -> DistributionVector -> Substitution
-run alphabet ciphertext languageMatrix languageVector =
+-- If includeSpaceInDigrams is True, languageMatrix is expected to contain records for space as the last character
+-- but alphabet should not contain space.
+run :: [Char] -> String -> DistributionMatrix -> DistributionVector -> Bool -> Substitution
+run alphabet ciphertext languageMatrix languageVector includeSpaceInDigrams =
     let
+        alphabetMaybeWithSpace = if includeSpaceInDigrams then alphabet ++ [' '] else alphabet
         orderedTextChars = textCharFrequencyOrder alphabet ciphertext
         orderedLanguageChars = orderListByList alphabet languageVector
         substitution = initialSubstitution orderedTextChars orderedLanguageChars
-        textMatrix = createTextMatrix alphabet (substituteText substitution ciphertext)
+        textMatrix = createTextMatrix alphabetMaybeWithSpace (substituteText substitution ciphertext)
         currentValue = evaluateDistribution textMatrix languageMatrix
         reverseMap = createReverseAlphabetMap alphabet
         swapperState = createState orderedTextChars
