@@ -60,10 +60,17 @@ swapInMatrix char1 char2 reverseMap =
         idx2 = reverseMap ! char2
     in swapCols idx1 idx2 . swapRows idx1 idx2
 
+-- Normalize a distribution matrix.
+normalizeMatrix :: Real a => [[a]] -> DistributionMatrix
+normalizeMatrix original =
+    let originalSum = sum $ map sum original
+    in map (map ((/ realToFrac originalSum) . realToFrac)) original
+
+-- Normalize a distribution vector.
+normalizeVector :: Real a => [a] -> DistributionVector
+normalizeVector original = map ((/ (realToFrac $ sum original)) . realToFrac) original
+
+
 -- Create a distribution matrix for a given text.
 createTextMatrix :: [Char] -> String -> DistributionMatrix
-createTextMatrix alphabet text =
-    let
-        digramCounts = textDigramCounts alphabet text
-        digramCountsSum = fromIntegral $ sum $ map sum digramCounts
-    in map (map ((/ digramCountsSum) . fromIntegral)) digramCounts
+createTextMatrix alphabet text = normalizeMatrix $ textDigramCounts alphabet text
