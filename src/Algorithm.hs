@@ -4,6 +4,7 @@ import DistributionMatrix (createTextMatrix, createReverseAlphabetMap, Distribut
     evaluateDistribution, ReverseAlphabetMap, swapInMatrix)
 import Substitution (initialSubstitution, Substitution, swapChars, substituteText)
 import FrequencyAnalyzer (orderListByList, textCharFrequencyOrder)
+import Debug.Trace (trace)
 
 -- State of the character swapping logic of the algorithm.
 data SwapperState = SwapperState {
@@ -70,7 +71,7 @@ step textMatrix languageMatrix reverseMap swapperState currentValue substitution
             then step textMatrix languageMatrix reverseMap newSwapperState currentValue substitution
             else
                 let newSubstitution = swapChars left right substitution
-                in step newTextMatrix languageMatrix reverseMap (resetState newSwapperState) newValue newSubstitution
+                in trace (show newValue) $ step newTextMatrix languageMatrix reverseMap (resetState newSwapperState) newValue newSubstitution
 
 -- Run the full algorithm.
 -- If includeSpaceInDigrams is True, languageMatrix is expected to contain records for space as the last character

@@ -8,12 +8,12 @@ The source document for the specification can be found [here](spec/).
 
 ## Data Sources
 
-- `data/english_1grams.csv`
-  - Downloaded from: [english 1grams - calmcode.io](https://calmcode.io/datasets/english_1grams)
+- `data/english/characters.csv`, `data/english/digrams.csv`
   - Original source: [English Letter Frequencies - practicalcryptography.com](http://practicalcryptography.com/cryptanalysis/letter-frequencies-various-languages/english-letter-frequencies/)
-- `data/english_2grams.csv`
-  - Downloaded from: [english 2grams - calmcode.io](https://calmcode.io/datasets/english_2grams)
-  - Original source: [English Letter Frequencies - practicalcryptography.com](http://practicalcryptography.com/cryptanalysis/letter-frequencies-various-languages/english-letter-frequencies/)
+  - Modifications: converted to CSV format
+- `data/english/plaintext/alice_in_wonderland_start.txt`
+  - Downloaded from: [GitHub](https://gist.github.com/phillipj/4944029)
+  - Original source: Lewis Carroll - Alice's Adventures in Wonderland
 
 ## Project information
 

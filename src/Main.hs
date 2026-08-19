@@ -1,8 +1,11 @@
 module Main where
 
 import Algorithm (run)
-import DistributionMatrix (DistributionMatrix, DistributionVector)
+import FileReader (readAlphabet, readLanguageMatrix, readLanguageVector)
+import InputReader (normalizeCiphertext, readCiphertext)
+import Substitution (substituteText)
 
+{-
 -- Expected substitution: a -> b, b -> a, c -> c
 
 alphabet :: [Char]
@@ -23,7 +26,26 @@ languageVector = [0.3, 0.55, 0.15]
 
 includeSpaceInDigrams :: Bool
 includeSpaceInDigrams = False
+-}
 
 main :: IO ()
 main = do
-    print $ run alphabet ciphertext languageMatrix languageVector includeSpaceInDigrams
+    putStrLn "Loading data..."
+    let separator = ','
+    alphabet <- readAlphabet "data/english/alphabet.txt"
+    rawCiphertext <- readCiphertext
+    let normalizedCiphertext = normalizeCiphertext alphabet rawCiphertext
+    maybeLanguageMatrix <- readLanguageMatrix "data/english/digrams.csv" alphabet separator
+    case maybeLanguageMatrix of
+        Left err -> putStrLn ("Failed to load language digram frequencies: " ++ err)
+        Right languageMatrix -> do
+            maybeLanguageVector <- readLanguageVector "data/english/characters.csv" alphabet separator
+            case maybeLanguageVector of
+                Left err -> putStrLn ("Failed to load language character frequencies" ++ err)
+                Right languageVector -> do
+                    putStrLn "Decoding..."
+                    let includeSpaceInDigrams = False
+                    let substitution = run alphabet normalizedCiphertext languageMatrix languageVector includeSpaceInDigrams
+                    print substitution
+                    let decodedText = substituteText substitution rawCiphertext
+                    putStrLn decodedText
