@@ -3,30 +3,36 @@ module Main where
 import Algorithm (run)
 import FileReader (readAlphabet, readLanguageMatrix, readLanguageVector)
 import InputReader (normalizeCiphertext, readCiphertext)
-import Substitution (substituteOriginalCiphertext)
+import Substitution (substituteOriginalCiphertext, substitutionToString)
 import Data.Char (isSpace)
+import Options.Applicative (execParser)
+import Cli (
+    CliOptions(
+        alphabetPath, characterFrequenciesPath, digramFrequenciesPath, printSubstitution, separatorChar, spaceInDigrams
+    ), parser)
+import System.IO (hPutStrLn, stderr)
 
 main :: IO ()
 main = do
-    putStrLn "Loading data..."
-    let separator = ','
-    alphabet <- readAlphabet "data/english/alphabet.txt"
+    options <- execParser parser
+    let separator = separatorChar options
+    alphabet <- readAlphabet (alphabetPath options)
     rawCiphertext <- readCiphertext
     let normalizedCiphertext = normalizeCiphertext alphabet rawCiphertext
     if all isSpace normalizedCiphertext then
-        putStrLn "Ciphertext is empty"
+        hPutStrLn stderr "Ciphertext is empty"
     else do
-        maybeLanguageMatrix <- readLanguageMatrix "data/english/digrams.csv" alphabet separator
+        maybeLanguageMatrix <- readLanguageMatrix (digramFrequenciesPath options) alphabet separator
         case maybeLanguageMatrix of
-            Left err -> putStrLn ("Failed to load language digram frequencies: " ++ err)
+            Left err -> hPutStrLn stderr ("Failed to load language digram frequencies: " ++ err)
             Right languageMatrix -> do
-                maybeLanguageVector <- readLanguageVector "data/english/characters.csv" alphabet separator
+                maybeLanguageVector <- readLanguageVector (characterFrequenciesPath options) alphabet separator
                 case maybeLanguageVector of
-                    Left err -> putStrLn ("Failed to load language character frequencies" ++ err)
+                    Left err -> hPutStrLn stderr ("Failed to load language character frequencies" ++ err)
                     Right languageVector -> do
-                        putStrLn "Decoding..."
-                        let includeSpaceInDigrams = False
-                        let substitution = run alphabet normalizedCiphertext languageMatrix languageVector includeSpaceInDigrams
-                        print substitution
+                        let substitution = run alphabet normalizedCiphertext languageMatrix languageVector (spaceInDigrams options)
                         let decodedText = substituteOriginalCiphertext substitution rawCiphertext
-                        putStrLn decodedText
+                        if printSubstitution options then do
+                            putStrLn $ substitutionToString alphabet substitution
+                            putStrLn decodedText
+                        else putStrLn decodedText

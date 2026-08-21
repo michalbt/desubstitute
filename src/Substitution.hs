@@ -1,9 +1,10 @@
 module Substitution where
 
-import Data.Map ((!), findWithDefault, insert, Map)
+import Data.Map ((!), findWithDefault, fromList, insert, Map, toList)
 import qualified Data.Map (lookup)
 import DistributionMatrix (mapFromKeysAndValues)
 import Data.Char (toLower, toUpper)
+import Data.Tuple (swap)
 
 -- Representation of a substitution as a map from ciphertext characters to plaintext characters.
 -- The space character is excluded as it is always expected to map to itself.
@@ -48,3 +49,10 @@ swapChars char1 char2 substitution =
 -- and language chars ordered by frequency (second argument).
 initialSubstitution :: [Char] -> [Char] -> Substitution
 initialSubstitution = mapFromKeysAndValues
+
+-- Print the substitution. It is printed "in reverse", i.e. as the substitution used to encode the plaintext,
+-- and ordered according to the alphabet.
+substitutionToString :: [Char] -> Substitution -> String
+substitutionToString alphabet substitution =
+    let reverseSubstitution = fromList $ map swap $ toList substitution
+    in concatMap (\c -> [c] ++ " -> " ++ [reverseSubstitution ! c] ++ "\n") alphabet
