@@ -8,7 +8,6 @@ def normalize(frequencies: dict[str, float]) -> dict[str, float]:
     total = sum(frequencies.values())
     for digram in frequencies.keys():
         frequencies[digram] /= total
-    #normalized = {digram: freq / total for digram, freq in frequencies.items()}
     return frequencies
 
 def read_digram_frequencies(path: str) -> dict[str, float]:
@@ -35,15 +34,16 @@ def substitute(text: str, substitution: dict[str, str]) -> str:
             result += " "
     return " " + result + " "
 
-def get_frequencies(text: str) -> dict[str, float]:
-    frequencies = defaultdict(lambda: 0)
+def get_frequencies(text: str, alphabet: list[str]) -> dict[str, float]:
+    frequencies = {char1 + char2: 0 for char1 in alphabet for char2 in alphabet}
     for char1, char2 in zip(text, text[1:]):
-        frequencies[char1 + char2] += 1
+        if char1 + char2 in frequencies:
+            frequencies[char1 + char2] += 1
     return normalize(frequencies)
 
 def evaluate(language_frequencies: dict[str, float], ciphertext: str, substitution: dict[str, str]) -> float:
     substituted_text = substitute(ciphertext, substitution)
-    text_frequencies = get_frequencies(substituted_text)
+    text_frequencies = get_frequencies(substituted_text, list(substitution.keys()))
     total = 0.0
     for digram in language_frequencies.keys():
         total += abs(language_frequencies[digram] - text_frequencies[digram])

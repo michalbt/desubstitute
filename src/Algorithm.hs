@@ -2,9 +2,9 @@ module Algorithm where
 
 import DistributionMatrix (createTextMatrix, createReverseAlphabetMap, DistributionMatrix, DistributionVector,
     evaluateDistribution, ReverseAlphabetMap, swapInMatrix)
-import Substitution (initialSubstitution, Substitution, swapChars, substituteText)
+import Substitution (initialSubstitution, Substitution, swapChars, substituteNormalizedCiphertext)
 import FrequencyAnalyzer (orderListByList, textCharFrequencyOrder)
-import Debug.Trace (trace)
+import Data.Map ((!))
 
 -- State of the character swapping logic of the algorithm.
 data SwapperState = SwapperState {
@@ -64,14 +64,14 @@ step textMatrix languageMatrix reverseMap swapperState currentValue substitution
     Nothing -> substitution
     Just ((left, right), newSwapperState) ->
         let
-            newTextMatrix = swapInMatrix left right reverseMap textMatrix
+            newTextMatrix = swapInMatrix (substitution ! left) (substitution ! right) reverseMap textMatrix
             newValue = evaluateDistribution newTextMatrix languageMatrix
         in
             if newValue >= currentValue
             then step textMatrix languageMatrix reverseMap newSwapperState currentValue substitution
             else
                 let newSubstitution = swapChars left right substitution
-                in trace (show newValue) $ step newTextMatrix languageMatrix reverseMap (resetState newSwapperState) newValue newSubstitution
+                in step newTextMatrix languageMatrix reverseMap (resetState newSwapperState) newValue newSubstitution
 
 -- Run the full algorithm.
 -- If includeSpaceInDigrams is True, languageMatrix is expected to contain records for space as the last character
@@ -83,7 +83,7 @@ run alphabet ciphertext languageMatrix languageVector includeSpaceInDigrams =
         orderedTextChars = textCharFrequencyOrder alphabet ciphertext
         orderedLanguageChars = orderListByList alphabet languageVector
         substitution = initialSubstitution orderedTextChars orderedLanguageChars
-        textMatrix = createTextMatrix alphabetMaybeWithSpace (substituteText substitution ciphertext)
+        textMatrix = createTextMatrix alphabetMaybeWithSpace (substituteNormalizedCiphertext substitution ciphertext)
         currentValue = evaluateDistribution textMatrix languageMatrix
         reverseMap = createReverseAlphabetMap alphabet
         swapperState = createState orderedTextChars

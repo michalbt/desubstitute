@@ -1,0 +1,3 @@
+This is some generic text. I am writing this text to then substitute it by a random substitution cipher and try to use
+my solver to get back the original. It is entirely possible that it will be too short to be resolved correctly; however,
+the only way to know is to actually try it and see the result.
