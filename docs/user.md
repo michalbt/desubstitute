@@ -10,12 +10,12 @@ To decrypt the cipher, `desubstitute` uses frequency analysis to guess the used 
 
 ## Building the app
 
-The app is written in [Haskell](TODO) uses [Cabal](TODO) as its dependency management and build system. Ensure you have [GHC](TODO) and Cabal installed.
+The app is written in [Haskell](https://www.haskell.org/) uses [Cabal](https://www.haskell.org/cabal/) as its dependency management and build system. Ensure you have [GHC](https://www.haskell.org/ghc/) and Cabal installed.
 
 Clone the repository:
 
 ```sh
-git clone https://github.com/michalbt/desubstitute/ (TODO)
+git clone https://github.com/michalbt/desubstitute.git
 cd desubstitute
 ```
 
