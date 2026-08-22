@@ -31,7 +31,7 @@ parserOptions = CliOptions
         <> short 'd'
         <> help "2-column CSV file with all digrams and their respective frequencies in the language"
         <> metavar "PATH"
-    ) <*> option auto (
+    ) <*> option auto ( -- TODO: now needs "','" as an argument, should work with ","
         long "separator"
         <> showDefault
         <> value ','

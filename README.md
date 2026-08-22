@@ -6,6 +6,10 @@ A command-line tool to decrypt substitution ciphers using frequency analysis.
 
 The source document for the specification can be found [here](spec/).
 
+## User documentation
+
+The user documentation can be found [here](docs/user.md).
+
 ## Data Sources
 
 - `data/english/characters.csv`, `data/english/digrams.csv`
