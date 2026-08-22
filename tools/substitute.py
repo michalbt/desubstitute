@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
+"""
+A tool to encrypt a given plaintext by a random substitution. Used for generating example ciphertexts.
+
+Usage:
+    tools/substitute.py path/to/plaintext.txt path/to/alphabet.txt
+
+Outputs the ciphertext on stdout and the used substitution on stderr.
+"""
+
 import random
 import sys
 

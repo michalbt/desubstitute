@@ -41,6 +41,7 @@ swapAt :: Int -> Int -> [a] -> [a]
 swapAt _ _ [] = error "indices to swap not in bounds"
 swapAt idx1 idx2 (x:xs)
   | idx1 > idx2 = swapAt idx2 idx1 (x:xs)
+  | idx1 == 0 && idx2 == 0 = x:xs
   | idx1 == 0 = uncurry (:) (replaceAt (idx2 - 1) x xs)
   | otherwise = x : swapAt (idx1 - 1) (idx2 - 1) xs
 
@@ -69,7 +70,6 @@ normalizeMatrix original =
 -- Normalize a distribution vector.
 normalizeVector :: Real a => [a] -> DistributionVector
 normalizeVector original = map ((/ (realToFrac $ sum original)) . realToFrac) original
-
 
 -- Create a distribution matrix for a given text.
 createTextMatrix :: [Char] -> String -> DistributionMatrix

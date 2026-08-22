@@ -3,6 +3,7 @@ module Cli where
 import Options.Applicative ((<**>), auto, fullDesc, help, helper, info, long, metavar, option, Parser, ParserInfo, progDesc,
     short, showDefault, strOption, switch, value)
 
+-- All available CLI options.
 data CliOptions = CliOptions {
     alphabetPath :: String,
     characterFrequenciesPath :: String,
@@ -12,6 +13,7 @@ data CliOptions = CliOptions {
     printSubstitution :: Bool
 }
 
+-- An optparse-applicative parser for the options.
 parserOptions :: Parser CliOptions
 parserOptions = CliOptions
     <$> strOption (
@@ -43,6 +45,7 @@ parserOptions = CliOptions
         <> help "If present, prints the substitution in addition to the substituted text"
     )
 
+-- A top-level optparse-applicative parser, handling --help message generation.
 parser :: ParserInfo CliOptions
 parser = info (parserOptions <**> helper) (
     fullDesc

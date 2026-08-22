@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
+"""
+Debugging tool used for computing the value of the evaluation function for the algorithm.
+
+Usage:
+    tools/evaluate.py path/to/digram/frequencies.csv path/to/ciphertext.txt
+
+The substitution needs to be provided on stdin in Haskell's "show" format for Map ("fromList [...]").
+"""
+
 import csv
 import sys
 

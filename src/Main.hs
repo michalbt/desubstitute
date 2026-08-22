@@ -30,7 +30,8 @@ main = do
                 case maybeLanguageVector of
                     Left err -> hPutStrLn stderr ("Failed to load language character frequencies" ++ err)
                     Right languageVector -> do
-                        let substitution = run alphabet normalizedCiphertext languageMatrix languageVector (spaceInDigrams options)
+                        let substitution =
+                                run alphabet normalizedCiphertext languageMatrix languageVector (spaceInDigrams options)
                         let decodedText = substituteOriginalCiphertext substitution rawCiphertext
                         if printSubstitution options then do
                             putStrLn $ substitutionToString alphabet substitution

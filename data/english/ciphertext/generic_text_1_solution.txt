@@ -1,0 +1,28 @@
+(Reverse-engineered from generic_text_1.txt because I lost the original substitution. Values for plaintext 'f', 'j', 'q', 'z' could not be recovered unambiguously as the text does not contain them.)
+
+a -> z
+b -> o
+c -> a
+d -> g
+e -> r
+f -> f
+g -> l
+h -> t
+i -> d
+j -> c
+k -> w
+l -> e
+m -> x
+n -> u
+o -> i
+p -> v
+q -> s
+r -> b
+s -> y
+t -> q
+u -> h
+v -> n
+w -> m
+x -> j
+y -> k
+z -> p

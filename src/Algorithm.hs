@@ -7,6 +7,8 @@ import FrequencyAnalyzer (orderListByList, textCharFrequencyOrder)
 import Data.Map ((!))
 
 -- State of the character swapping logic of the algorithm.
+-- At each step of the algorithm, two characters - "left" and "right" - are swapped. The order is as follows:
+-- (a_1, a_2), (a_2, a_3), ..., (a_(n-1), a_n), (a_1, a_3), (a_2, a_4), ..., (a_1, a_n)
 data SwapperState = SwapperState {
     -- Full alphabet, ordered by frequency in the ciphertext.
     full :: [Char],
