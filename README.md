@@ -6,9 +6,11 @@ A command-line tool to decrypt substitution ciphers using frequency analysis.
 
 The source document for the specification can be found [here](spec/).
 
-## User documentation
+## Documentation
 
 The user documentation can be found [here](docs/user.md).
+
+The developer documentation can be found [here](docs/developer.md). Additionally, all types and functions are documented directly in the source code files.
 
 ## Data Sources
 
